@@ -1,4 +1,8 @@
 '''
+003. Longest Substring Without Repeating Characters
+Difficulty: Medium
+Url: leetcode.com/problems/longest-substring-without-repeating-characters/
+
 Given a string, find the length of the longest substring without repeating 
 characters.
 
@@ -9,48 +13,27 @@ Explanation: The answer is "abc", with the length of 3.
 '''
 
 '''
-intuition
+intuition:
+Starting from last, find the longest substring. 
+Compare towards the end.
+If a string has reached the end of the previous substring,
+then it has reached the last index before a duplicate (or end of string), terminating.
+Compare and update max, continuing towards the first letter.
 
-word = "abcabcbb"
-abca
-bcab
-cabc
-abc
-bc
-cb
-b
-
-find indexes of pairs?
-
-a: (0, 3)
-b: (1, 4),(4, 6),(6, 7)
-c: (2, 5)
-
-Sort by longest
-a: (0, 3) = 3
-b: (1, 4) = 3
-c: (2, 5) = 3
-b: (4, 6) = 2
-b: (6, 7) = 1
-
-see if intersects with another?
-a: (0, 3) = 3
-no intersects!
-
-create a tree?
-
-min()
-
+RT: O(n^2): needs to iterate across string of length n, n times
+Space: no recursion. only need to keep track of a prev tuple.
 '''
-def lengthOfLongestSubstring(s: str) -> int:
 
+def lengthOfLongestSubstring(s: str) -> int:
+    
+    # base cases
     if s == "":
         return 0
 
     if len(s) == 1:
         return 1
 
-    max = 0
+    maxLen = 0
 
     # going backwards from the last letter
     for i in range(len(s) - 1, -1, -1):
@@ -61,37 +44,48 @@ def lengthOfLongestSubstring(s: str) -> int:
 
         else:
             curr = (i, i)
-            # find first match
+
+            # find substr
             for j in range(i + 1, len(s)):
+                # found match
                 if s[i] == s[j]:
                     break
+                # update curr tuple - extend range
                 else:
                     curr = (i, j)
+                # found end of prev substr
                 if j == prev[1]:
                     break
-
-            if curr[1] - curr[0] + 1 > max:
-                max = curr[1] - curr[0] + 1
-
+            
+            # update current max
+            maxLen = max(maxLen, curr[1] - curr[0] + 1)
+            # store prev for next iter
             prev = curr
 
-    return max          
+    return maxLen          
 
 
 if __name__ == '__main__':
     s = ("", 0)
     val = lengthOfLongestSubstring(s[0])
+    print("'{}': {} (expected {})".format(s[0], val, s[1]))
+
     s = (" ", 1)
     val = lengthOfLongestSubstring(s[0])
+    print("'{}': {} (expected {})".format(s[0], val, s[1]))
+
     s = ("abcabcbb", 3)
     val = lengthOfLongestSubstring(s[0])
-    print("{}: {} (expected {})".format(s[0], val, s[1]))
+    print("'{}': {} (expected {})".format(s[0], val, s[1]))
+
     s = ("bbbbb", 1)
     val = lengthOfLongestSubstring(s[0])
-    print("{}: {} (expected {})".format(s[0], val, s[1]))
+    print("'{}': {} (expected {})".format(s[0], val, s[1]))
+
     s = ("pwwkew", 3)
     val = lengthOfLongestSubstring(s[0])
-    print("{}: {} (expected {})".format(s[0], val, s[1]))
+    print("'{}': {} (expected {})".format(s[0], val, s[1]))
+
     s = ("cdd", 2)
     val = lengthOfLongestSubstring(s[0])
-    print("{}: {} (expected {})".format(s[0], val, s[1]))
+    print("'{}': {} (expected {})".format(s[0], val, s[1]))
