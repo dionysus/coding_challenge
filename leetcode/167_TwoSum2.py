@@ -1,5 +1,6 @@
 '''
 167. Two Sum II - Input array is sorted
+Difficulty: Easy
 URL: https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
 
 Given an array of integers that is already sorted in ascending order, find two
