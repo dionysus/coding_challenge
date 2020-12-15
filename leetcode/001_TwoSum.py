@@ -1,25 +1,19 @@
-class Solution(object):
-    def twoSum(nums, target):
-        """
-        :type nums: List[int]
-        :type target: int
-        :rtype: List[int]
-        """
-        
-        # pop off lastnumber in nums, 
-        # find pop difference from target
-        # difference in nums
-        #    if true:
-        #        search>> nums.index(difference)
-        #   if not:
-        #        repeat with next number in list 
+class Solution:
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        # build a dictionary of value counts
+        num_dict = {}
+        for i in range(len(nums)):
+            if nums[i] not in num_dict:
+                num_dict[nums[i]] = []
+            num_dict[nums[i]].append(i)
+            
+        # look for a match
+        for num in num_dict:
+            diff = target - num
 
-        while True:
+            if num == diff:
+                if len(num_dict[num]) == 2:
+                    return num_dict[num]
 
-            search = nums.pop()
-            search_index = len(nums)
-            difference = target - search
-
-            if difference in nums:
-                return [nums.index(difference), search_index]
-                break
+            elif diff in num_dict:
+                return num_dict[num] + num_dict[diff][0]
