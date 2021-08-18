@@ -16,42 +16,42 @@ def threeSum(nums):
     :rtype: List[List[int]]
     """
     nums.sort()
-
     triplets = []
 
-    i = 0
-    while(i < len(nums)):
-        target = nums[i]
-        sumPair = twoSum(nums[i + 1:], -target)
-
-        for pair in sumPair:
-            triplets.append([target] + pair)
-
-        while (i < len(nums) and nums[i] == target):
-            i += 1
-
-    return triplets
-
-def twoSum(nums, target):
-    # build a dictionary of value counts
+    # make dict of count
     num_dict = {}
     for i in range(len(nums)):
         if nums[i] not in num_dict:
             num_dict[nums[i]] = 0
         num_dict[nums[i]] += 1
-        
-    # look for a match
+
+    i = 0
+    while(i < len(nums)):
+        target = nums[i]
+        num_dict[target] -= 1
+        sumPair = twoSum(nums[i + 1:], -target, num_dict)
+
+        for pair in sumPair:
+            triplets.append([target] + pair)
+
+        # next iter
+        num_dict[target] = 0
+        while (i < len(nums) and nums[i] == target):
+            i += 1
+
+    return triplets
+
+def twoSum(nums, target, num_dict):
     pairs = []
     for num in num_dict:
-        diff = target - num
+        if num_dict[num] <= 0:
+            continue
 
-        if num == diff:
-            if num_dict[num] >= 2:
-                pairs.append([num, num])
-            
-        elif diff in num_dict:
-            if num < diff:
-                pairs.append([num, diff])
+        diff = target - num
+        if (diff in num_dict and
+            (diff == num and num_dict[num] >= 2 or
+            diff > num and num_dict[diff] >= 1)):
+            pairs.append([num, diff])
 
     return pairs
 
